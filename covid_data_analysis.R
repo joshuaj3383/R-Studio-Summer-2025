@@ -3,10 +3,9 @@ library(ggplot2)
 library(tidyverse)
 
 start_date <- as.Date("2020-04-12") # First date in the database
-end_date <- as.Date("2022-09-20") # Last date in the database before they change formats, note that the last date is 3-9-23
 
 # For testing purposes or if you don't want to wait for everything to load
-#end_date <- as.Date("2020-05-12") 
+end_date <- as.Date("2020-05-12") 
 
 # Gets the list of urls using the url pattern
 all_dates <- seq(start_date, end_date, by = "day") # https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.Date.html
@@ -71,17 +70,6 @@ national_deaths <- function(start = start_date, end = end_date) {
     labs(title = "National COVID Deaths", x = "Date", y = "Deaths")
 }
 
-state_positivity <- function(state_name, start = start_date, end = end_date) {
-  df <- covid_data %>%
-    filter(Province_State == state_name, Date >= start, Date <= end) %>%
-    group_by(Date) %>%
-    summarise(Positivity = sum(Confirmed, na.rm = TRUE) / sum(Total_Test_Results, na.rm = TRUE) * 100)
-  ggplot(df, aes(Date, Positivity)) +
-    geom_line(color = "purple") +
-    labs(title = paste("COVID Positivity Rate in", state_name),
-         x = "Date", y = "Positivity Rate (%)")
-}
-
 
 
 
@@ -89,6 +77,5 @@ state_cases("New York")
 state_deaths("Florida")
 national_cases()
 national_deaths()
-state_positivity("Texas", start = as.Date("2021-04-20"), end = as.Date("2021-04-30"))
 
 
